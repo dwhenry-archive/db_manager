@@ -1,0 +1,32 @@
+h1 Listing db_servers
+table
+  tr
+    th Name
+    th Disabled
+    th Sun
+    th Mon
+    th Tue
+    th Wed
+    th Thu
+    th Fri
+    th Sat
+    th Status
+    th Last Completed
+  - @db_servers.each do |db_server|
+    tr
+      td= db_server.name
+      td= db_server.state ? '' : 'Yes'
+      td= db_server.sun ? 'Yes' : ''
+      td= db_server.mon ? 'Yes' : ''
+      td= db_server.tue ? 'Yes' : ''
+      td= db_server.wed ? 'Yes' : ''
+      td= db_server.thu ? 'Yes' : ''
+      td= db_server.fri ? 'Yes' : ''
+      td= db_server.sat ? 'Yes' : ''
+      td Running (Started ...)
+      td
+        = link_to 'Show', db_server
+        = link_to 'Edit', edit_db_server_path(db_server)
+        = link_to 'Destroy', db_server, method: :delete, data: { confirm: 'Are you sure?' }
+br
+= link_to 'Add Server', new_db_server_path

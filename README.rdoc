@@ -1,0 +1,23 @@
+=== DB Manager
+
+Try and simplify management and connections between multiple database connections and web server environments
+
+The manager is comprised of the following parts:
+
+* __Web App__ This is used to control when the database should be reload, and manage which database each web server should use
+* __Connection Gem__ This updates the database yml file as part of the server boot process based on the configuration retrieved from the _Web App_
+* __DB Updater__ Run as a crontask, this is a simply script which connects the _Web App_ to determine if a specific DB instance should be updated and if so run the appropriate update script
+
+== Web App
+
+== Connection Gem
+
+Should be included only within specific groups where it should be run.
+
+Configured using #{Rails.root}/config/connection.yml
+
+= Example connection.yml
+
+
+
+== DB Updater

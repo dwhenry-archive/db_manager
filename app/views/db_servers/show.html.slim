@@ -1,0 +1,41 @@
+p#notice
+  = notice
+p
+  b
+    | Name:
+  = @db_server.name
+p
+  b
+    | State:
+  = @db_server.state
+p
+  b
+    | Sun:
+  = @db_server.sun
+p
+  b
+    | Mon:
+  = @db_server.mon
+p
+  b
+    | Tue:
+  = @db_server.tue
+p
+  b
+    | Wed:
+  = @db_server.wed
+p
+  b
+    | Thu:
+  = @db_server.thu
+p
+  b
+    | Fri:
+  = @db_server.fri
+p
+  b
+    | Sat:
+  = @db_server.sat
+= link_to 'Edit', edit_db_server_path(@db_server)
+|  | 
+= link_to 'Back', db_servers_path
