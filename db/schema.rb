@@ -11,20 +11,13 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130530162049) do
+ActiveRecord::Schema.define(:version => 20130602155624) do
 
-  create_table "db_servers", :force => true do |t|
+  create_table "servers", :force => true do |t|
     t.string   "name"
-    t.boolean  "state"
-    t.boolean  "sun"
-    t.boolean  "mon"
-    t.boolean  "tue"
-    t.boolean  "wed"
-    t.boolean  "thu"
-    t.boolean  "fri"
-    t.boolean  "sat"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+    t.string   "server_type"
   end
 
 end

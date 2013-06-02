@@ -10,6 +10,9 @@ The manager is comprised of the following parts:
 
 == Web App
 
+* Maintain and control database and web server configurations
+* Store and report on database and web server status and historic usage
+
 == Connection Gem
 
 Should be included only within specific groups where it should be run.
