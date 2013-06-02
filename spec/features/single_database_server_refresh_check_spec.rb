@@ -15,6 +15,10 @@ feature %{
           @server.settings.create(key: day_name.downcase, value: 'true')
         end
       end
+
+      def enable_round_robin
+        @server.settings.create(key: 'round_robin', value: 'true')
+      end
     end
   end
 
@@ -47,5 +51,16 @@ feature %{
 
       check_db_server('test_server').should == 'false'
     end
+  end
+
+  scenario 'When multiple server are set to round robin mode it will select the first server by id' do
+    Timecop.travel(Date.today - Date.today.wday) do
+      create_db_server('test_server_1') { |s| s.enable_monday; s.enable_round_robin }
+      create_db_server('test_server_2') { |s| s.enable_monday; s.enable_round_robin }
+
+      check_db_server('test_server_1').should == 'true'
+      check_db_server('test_server_2').should == 'false'
+    end
+
   end
 end
