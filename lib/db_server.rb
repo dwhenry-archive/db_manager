@@ -18,6 +18,7 @@ private
       .where(server_type: 'DbServer')
       .joins(:settings)
       .where(server_settings: {key: 'round_robin', value: 'true'})
+      .sort_by{|s| s.logs.last.try(:created_at) || Time.at(0) }
   end
 
   def server

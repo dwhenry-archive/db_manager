@@ -19,6 +19,12 @@ feature %{
       def enable_round_robin
         @server.settings.create(key: 'round_robin', value: 'true')
       end
+
+      def set_last_run(date)
+        Timecop.travel(date) do
+          @server.logs.create(action: 'db_update_complete', source: 'test')
+        end
+      end
     end
   end
 
@@ -53,14 +59,56 @@ feature %{
     end
   end
 
-  scenario 'When multiple server are set to round robin mode it will select the first server by id' do
-    Timecop.travel(Date.today - Date.today.wday) do
-      create_db_server('test_server_1') { |s| s.enable_monday; s.enable_round_robin }
-      create_db_server('test_server_2') { |s| s.enable_monday; s.enable_round_robin }
+  context 'When multiple server are set to round robin mode' do
+    scenario 'it will select the first server by id if no last update data' do
+      Timecop.travel(Date.today - Date.today.wday) do
+        create_db_server('test_server_1') do |s|
+          s.enable_monday
+          s.enable_round_robin
+        end
+        create_db_server('test_server_2') do |s|
+          s.enable_monday
+          s.enable_round_robin
+        end
 
-      check_db_server('test_server_1').should == 'true'
-      check_db_server('test_server_2').should == 'false'
+        check_db_server('test_server_1').should == 'true'
+        check_db_server('test_server_2').should == 'false'
+      end
     end
 
+    scenario 'it will select the server with the oldest copy' do
+      Timecop.travel(Date.today - Date.today.wday) do
+        create_db_server('test_server_1') do |s|
+          s.enable_monday
+          s.enable_round_robin
+          s.set_last_run(Date.today-1)
+        end
+        create_db_server('test_server_2') do |s|
+          s.enable_monday
+          s.enable_round_robin
+          s.set_last_run(Date.today-2)
+        end
+
+        check_db_server('test_server_1').should == 'false'
+        check_db_server('test_server_2').should == 'true'
+      end
+    end
+
+    scenario 'it will select the server without an update if one exists' do
+      Timecop.travel(Date.today - Date.today.wday) do
+        create_db_server('test_server_1') do |s|
+          s.enable_monday
+          s.enable_round_robin
+          s.set_last_run(Date.today-1)
+        end
+        create_db_server('test_server_2') do |s|
+          s.enable_monday
+          s.enable_round_robin
+        end
+
+        check_db_server('test_server_1').should == 'false'
+        check_db_server('test_server_2').should == 'true'
+      end
+    end
   end
 end
