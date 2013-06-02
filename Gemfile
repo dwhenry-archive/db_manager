@@ -28,6 +28,7 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'capybara'
   gem 'timecop'
+  gem 'debugger'
 end
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
