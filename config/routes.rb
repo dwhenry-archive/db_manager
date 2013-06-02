@@ -1,6 +1,8 @@
 DbManager::Application.routes.draw do
   resources :db_servers
 
+  match '/update_dbs/:name' => 'update_dbs#check', as: :db_server_check
+
   root to: 'db_servers#index'
   # The priority is based upon order of creation:
   # first created -> highest priority.

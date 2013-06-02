@@ -11,7 +11,17 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130602155624) do
+ActiveRecord::Schema.define(:version => 20130602162429) do
+
+  create_table "server_settings", :force => true do |t|
+    t.integer  "server_id"
+    t.string   "key"
+    t.string   "value"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "server_settings", ["server_id"], :name => "index_server_settings_on_server_id"
 
   create_table "servers", :force => true do |t|
     t.string   "name"
