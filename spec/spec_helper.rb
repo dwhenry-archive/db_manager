@@ -2,7 +2,9 @@
 ENV["RAILS_ENV"] ||= 'test'
 require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
-require 'rspec/autorun'
+unless ENV['ZEUS_MASTER_FD']
+  require 'rspec/autorun'
+end
 require 'capybara/rails'
 require 'ruby-debug'
 # Requires supporting ruby files with custom matchers and macros, etc,
