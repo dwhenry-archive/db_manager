@@ -5,9 +5,9 @@ feature %{
 } do
 
   module Builder
-    class Server
+    class ServerSet
       def initialize(name)
-        @server = ::Server.create(name: name, server_type: 'DbServer')
+        @server = ::ServerSet.create(name: name, server_type: 'DbServer')
       end
 
       Date::DAYNAMES.each do |day_name|
@@ -29,7 +29,7 @@ feature %{
   end
 
   def create_db_server(name)
-    yield Builder::Server.new(name)
+    yield Builder::ServerSet.new(name)
   end
 
   def check_db_server(name)

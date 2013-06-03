@@ -1,4 +1,4 @@
-class Server < ActiveRecord::Base
+class ServerSet < ActiveRecord::Base
   attr_accessible :name, :server_type
 
   has_many :settings, class_name: 'ServerSettings'
