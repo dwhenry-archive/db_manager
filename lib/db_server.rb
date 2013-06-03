@@ -1,3 +1,6 @@
+require 'server'
+require 'server/db_server'
+
 class DbServer
   def initialize(name)
     @name = name
@@ -14,17 +17,14 @@ class DbServer
 private
 
   def round_robin_servers
-    Server
-      .where(server_type: 'DbServer')
-      .joins('join server_settings rr_settings on rr_settings.server_id = servers.id')
-      .where(rr_settings: {key: 'round_robin', value: 'true'})
-      .joins('join server_settings wd_settings on wd_settings.server_id = servers.id')
-      .where(wd_settings: {key: Date::DAYNAMES[Date.today.wday].downcase, value: 'true'})
-      .sort_by{|s| s.logs.last.try(:created_at) || Time.at(0) }
+    Server::DbServer.round_robin.for_today
+      .sort_by do |server|
+        (server.logs.last.try(:created_at) || Time.at(0)).to_date
+      end
   end
 
   def server
-    @server ||= Server.where(name: @name, server_type: 'DbServer').first || raise(ActiveRecord::RecordNotFound)
+    @server ||= Server::DbServer.where(name: @name).first || raise(ActiveRecord::RecordNotFound)
   end
 
   def day_name
