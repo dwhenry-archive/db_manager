@@ -37,6 +37,18 @@ feature %{
     within('body') { return page.html }
   end
 
+  def travel_to_monday
+    Timecop.travel(Date.today - Date.today.wday + 1) do
+      yield
+    end
+  end
+
+  def travel_to_sunday
+    Timecop.travel(Date.today - Date.today.wday ) do
+      yield
+    end
+  end
+
   scenario 'Return 404 when server is not configured' do
     expect do
       check_db_server('invalid_server')
@@ -44,7 +56,7 @@ feature %{
   end
 
   scenario 'When server exists and is configured to run on the given day it will return true' do
-    Timecop.travel(Date.today - Date.today.wday) do
+    travel_to_sunday do
       create_db_server('test_server') { |s| s.enable_sunday }
 
       check_db_server('test_server').should == 'true'
@@ -52,7 +64,7 @@ feature %{
   end
 
   scenario 'When server exists and is configured not to run on the given day it will return false' do
-    Timecop.travel(Date.today - Date.today.wday) do
+    travel_to_sunday do
       create_db_server('test_server') { |s| s.enable_monday }
 
       check_db_server('test_server').should == 'false'
@@ -61,7 +73,7 @@ feature %{
 
   context 'When multiple server are set to round robin mode' do
     scenario 'it will select the first server by id if no last update data' do
-      Timecop.travel(Date.today - Date.today.wday) do
+      travel_to_monday do
         create_db_server('test_server_1') do |s|
           s.enable_monday
           s.enable_round_robin
@@ -77,7 +89,7 @@ feature %{
     end
 
     scenario 'it will select the server with the oldest copy' do
-      Timecop.travel(Date.today - Date.today.wday) do
+      travel_to_monday do
         create_db_server('test_server_1') do |s|
           s.enable_monday
           s.enable_round_robin
@@ -95,7 +107,7 @@ feature %{
     end
 
     scenario 'it will select the server without an update if one exists' do
-      Timecop.travel(Date.today - Date.today.wday) do
+      travel_to_monday do
         create_db_server('test_server_1') do |s|
           s.enable_monday
           s.enable_round_robin
