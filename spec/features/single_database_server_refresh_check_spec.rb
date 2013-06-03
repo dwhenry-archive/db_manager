@@ -122,5 +122,23 @@ feature %{
         check_db_server('test_server_2').should == 'true'
       end
     end
+
+    scenario 'it will ignore round robin which dont include the current day' do
+      travel_to_monday do
+        create_db_server('test_server_1') do |s|
+          s.enable_monday
+          s.enable_round_robin
+          s.set_last_run(Date.today-1)
+        end
+        create_db_server('test_server_2') do |s|
+          s.enable_sunday
+          s.enable_round_robin
+          s.set_last_run(Date.today-2)
+        end
+
+        check_db_server('test_server_1').should == 'true'
+        check_db_server('test_server_2').should == 'false'
+      end
+    end
   end
 end
