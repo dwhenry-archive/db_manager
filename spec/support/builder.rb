@@ -8,15 +8,18 @@ module Builder
     within('body') { return page.html }
   end
 
-  def travel_to_monday
-    Timecop.travel(Date.today - Date.today.wday + 1) do
-      yield
-    end
+  def travel_to_monday(&block)
+    travel_to(Date.today - Date.today.wday + 1, &block)
   end
 
-  def travel_to_sunday
-    Timecop.travel(Date.today - Date.today.wday ) do
-      yield
+  def travel_to_sunday(&block)
+    travel_to(Date.today - Date.today.wday, &block)
+  end
+
+  def travel_to(date, &block)
+    time = date.to_time.advance(hours: 3)
+    Timecop.travel(time) do
+      block.call
     end
   end
 
