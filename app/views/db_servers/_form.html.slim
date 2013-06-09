@@ -1,12 +1,12 @@
-= form_for @db_server do |f|
+= form_for db_servers_path(@db_server.server) do |f|
 
   .field
     = f.label :name
     = f.text_field :name
 
   .field
-    = f.label :state, 'State (On/Off)'
-    = f.check_box :state
+    = f.label :round_robin, 'Enable Round Robin'
+    = f.check_box :round_robin
 
   .field
     h3 Run On

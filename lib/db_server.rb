@@ -1,5 +1,12 @@
 class DbServer
-  def initialize(name)
+  class << self
+    delegate :all,
+      to: ServerSet::DbServerSet
+  end
+
+  attr_reader :name
+
+  def initialize(name=nil)
     @name = name
   end
 
@@ -11,6 +18,14 @@ class DbServer
     end
   end
 
+  def server
+    @server ||= if name
+      ServerSet::DbServerSet.where(name: name).first || raise(ActiveRecord::RecordNotFound)
+    else
+      ServerSet.new(server_type: 'DBServerSet')
+    end
+  end
+
 private
 
   def round_robin_servers
@@ -18,10 +33,6 @@ private
       .sort_by do |server|
         (server.logs.last.try(:created_at) || Time.at(0)).to_date
       end
-  end
-
-  def server
-    @server ||= ServerSet::DbServerSet.where(name: @name).first || raise(ActiveRecord::RecordNotFound)
   end
 
   def day_name
