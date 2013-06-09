@@ -25,7 +25,7 @@ module Builder
 
   class ServerSet
     def initialize(name)
-      @server = ::ServerSet.create(name: name, server_type: 'DbServer')
+      @server = ::ServerSet.create(name: name, server_type: 'DbServerSet')
     end
 
     Date::DAYNAMES.each do |day_name|

@@ -1,6 +1,6 @@
 class ServerSet
   class DbServerSet < ServerSet
-    default_scope where(server_type: 'DbServer')
+    default_scope where(server_type: 'DbServerSet')
     # self.table_name = 'servers'
 
     scope :round_robin,
