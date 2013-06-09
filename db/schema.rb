@@ -11,20 +11,33 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130530162049) do
+ActiveRecord::Schema.define(:version => 20130603221501) do
 
-  create_table "db_servers", :force => true do |t|
-    t.string   "name"
-    t.boolean  "state"
-    t.boolean  "sun"
-    t.boolean  "mon"
-    t.boolean  "tue"
-    t.boolean  "wed"
-    t.boolean  "thu"
-    t.boolean  "fri"
-    t.boolean  "sat"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+  create_table "logs", :force => true do |t|
+    t.integer  "server_set_id"
+    t.string   "action"
+    t.string   "source"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
   end
+
+  add_index "logs", ["server_set_id"], :name => "index_logs_on_server_id"
+
+  create_table "server_sets", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+    t.string   "server_type"
+  end
+
+  create_table "server_settings", :force => true do |t|
+    t.integer  "server_set_id"
+    t.string   "key"
+    t.string   "value"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+  end
+
+  add_index "server_settings", ["server_set_id"], :name => "index_server_settings_on_server_id"
 
 end
